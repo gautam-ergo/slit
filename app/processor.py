@@ -51,24 +51,29 @@ def process(source_df: pd.DataFrame):
                     df[column].str.contains(fr"\b({'|'.join(user_text_input)})\b", regex=True, na=False,
                                             case=False)]
                 st.session_state.user_text_input = user_text_input
-            if 'input' in column.lower():
-                left, right = st.columns((1, 60))
-                left.write("↳")
-                ingred_names = df['name'].drop_duplicates().sort_values(ascending=True)
-                user_text_input = right.multiselect(f'Select your value for {column}:', ingred_names, )
-
-                if user_text_input:
-                    st.write("Filtered Rows")
-                    st.session_state.filtered_df = df[
-                        df['name'].str.contains(fr"\b({'|'.join(user_text_input)})\b", regex=True, na=False,
-                                                case=False)]
-                    st.session_state.user_text_input = user_text_input
+                st.dataframe(st.session_state.filtered_df)
+            # if 'input' in column.lower():
+            #     left, right = st.columns((1, 60))
+            #     left.write("↳")
+            #     ingred_names = df['name'].drop_duplicates().sort_values(ascending=True)
+            #     user_text_input = right.multiselect(f'Select your value for {column}:', ingred_names, )
+            #
+            #     if user_text_input:
+            #         st.write("Filtered Rows")
+            #         st.session_state.filtered_df = df[
+            #             df['name'].str.contains(fr"\b({'|'.join(user_text_input)})\b", regex=True, na=False,
+            #                                     case=False)]
+            #         st.session_state.user_text_input = user_text_input
 
         return df
 
     cached_df = cache_input(source_df)
 
-    st.dataframe(filter_dataframe(cached_df))
+    data = filter_dataframe(cached_df)
+
+    if not user_text_input:
+        st.write("All rows:")
+        st.dataframe(data)
 
     if user_text_input:
         # if 'user_text_input' in st.session_state and st.session_state.user_text_input:
@@ -87,7 +92,8 @@ def process(source_df: pd.DataFrame):
                 st.session_state.selected = st.session_state['FormSubmitter:form_1-Submit']  # True
                 st.json(replacements)
 
-        if st.session_state.selected and replacements:
+        if st.session_state.get('FormSubmitter:form_1-Submit'):
+        # if st.session_state.selected and replacements:
             my_expander = st.expander("Modified Data", expanded=True)
             with my_expander:
                 dic = {r"\b(?i){}\b".format(k.strip()): v for k, v in replacements.items()}

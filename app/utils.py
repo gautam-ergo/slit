@@ -14,6 +14,7 @@ def convert_df(df):
 
 
 def pair_replacements():
+    replacements.clear()
     for i, word in enumerate(st.session_state.user_text_input):
         if not st.session_state[f"Replacement_{i}"]:
             st.error("replacement cannot be blank")
