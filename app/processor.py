@@ -32,9 +32,10 @@ def process(source_df: pd.DataFrame):
             if submitted:
                 pair_replacements()
                 st.session_state.selected = st.session_state['FormSubmitter:form_1-Submit']  # True
+                st.session_state.data_updated = False
                 st.json(replacements)
 
-        if st.session_state.get('FormSubmitter:form_1-Submit'):
+        if st.session_state.get('FormSubmitter:form_1-Submit') or st.session_state.data_updated:
             # if st.session_state.selected and replacements:
             my_expander = st.expander("Modified Data", expanded=True)
             with my_expander:
