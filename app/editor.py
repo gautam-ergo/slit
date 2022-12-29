@@ -23,7 +23,7 @@ def editable_grid(df):
     grid_response = AgGrid(
         df,
         gridOptions=gridOptions,
-        height=300,  # min(MIN_HEIGHT + len(df) * ROW_HEIGHT, MAX_HEIGHT),
+        height=500,  # min(MIN_HEIGHT + len(df) * ROW_HEIGHT, MAX_HEIGHT),
         width='100%',
         data_return_mode=DataReturnMode.FILTERED,
         update_mode=GridUpdateMode.GRID_CHANGED,
