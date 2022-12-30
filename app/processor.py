@@ -3,7 +3,7 @@ import streamlit as st
 
 from app.editor import editable_grid
 from app.filter import filter_dataframe
-from app.utils import convert_df, cache_input, replacements, pair_replacements
+from app.utils import convert_df, cache_input, replacements, pair_replacements, memoize
 
 
 def process(source_df: pd.DataFrame):
@@ -15,7 +15,8 @@ def process(source_df: pd.DataFrame):
 
     if not filtered:
         st.write("All rows:")
-        st.dataframe(data)
+        # st.dataframe(data)
+        memoize(data)
 
     if filtered:
         # if 'user_text_input' in st.session_state and st.session_state.user_text_input:

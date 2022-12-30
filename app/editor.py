@@ -2,6 +2,8 @@ import pandas as pd
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
+from app.utils import memoize
+
 MIN_HEIGHT = 50
 MAX_HEIGHT = 500
 ROW_HEIGHT = 60
@@ -42,4 +44,4 @@ def editable_grid(df):
         subset = pd.DataFrame.from_dict(selected, orient='columns')
         subset.drop('_selectedRowNodeInfo', axis=1, inplace=True)
         st.write("Selected grid data:")
-        st.dataframe(subset)
+        memoize(subset)

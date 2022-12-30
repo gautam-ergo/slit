@@ -4,6 +4,8 @@ import pandas as pd
 import streamlit as st
 from pandas import DataFrame
 
+from app.utils import memoize
+
 user_text_input = []
 
 
@@ -46,7 +48,7 @@ def filter_dataframe(inp_df: pd.DataFrame) -> Union[tuple[DataFrame, None], tupl
                 df[column].str.contains(fr"\b({'|'.join(user_text_input)})\b", regex=True, na=False,
                                         case=False)]
             st.session_state.user_text_input = user_text_input
-            st.dataframe(st.session_state.filtered_df)
+            memoize(st.session_state.filtered_df)
         # if 'input' in column.lower():
         #     left, right = st.columns((1, 60))
         #     left.write("↳")
