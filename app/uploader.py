@@ -13,21 +13,22 @@ input_df: Any = ""
 
 def read_input(file):
     global file_specified
-    temp = pd.read_csv(file)
-    fleeting_container = st.empty()
-    with fleeting_container:
-        if {'name', 'input'} - set(list(temp.columns)):
-            st.error(
-                f"Input file does not contain required columns:'input', 'name'",
-                icon='❌'
-            )
-            st.info(f"Parsed columns - {set(list(temp.columns))}")
-            st.stop()
-        st.success(f"Parsed columns - {set(list(temp.columns))}")
-        time.sleep(2)
-        st.success("File upload success")
-        time.sleep(2)
-    fleeting_container.empty()
+    with st.spinner(text="Verifying file..."):
+        temp = pd.read_csv(file)
+        fleeting_container = st.empty()
+        with fleeting_container:
+            if {'index','name', 'input'} - set(list(temp.columns)):
+                st.error(
+                    f"Input file does not contain required columns:'index', 'input', 'name'",
+                    icon='❌'
+                )
+                st.info(f"Parsed columns - {set(list(temp.columns))}")
+                st.stop()
+            st.success(f"Parsed columns - {set(list(temp.columns))}")
+            time.sleep(2)
+            st.success("File upload success")
+            time.sleep(2)
+        fleeting_container.empty()
     file_specified = True
     return temp
 
@@ -39,7 +40,8 @@ def upload_input():
     with holder.container():
         if upload:
             file_specified = False
-        if (upload or ('source' in st.session_state)) and not file_specified:
+            st.session_state['source'] = '<select>'
+        if 'source' in st.session_state and not file_specified:
             inp_source = st.selectbox("Select file source:", ['<select>', 'Github', 'Local'], key="source", index=0)
             if 'local' in inp_source.lower():
                 upload_data = st.file_uploader(
