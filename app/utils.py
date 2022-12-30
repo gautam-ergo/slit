@@ -8,7 +8,7 @@ def cache_input(df):
     return df
 
 
-@st.experimental_memo
+# @st.experimental_memo
 def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
 
