@@ -33,7 +33,9 @@ def editable_grid(df):
     )
 
     # st.write(type(grid_response['data']))
-    st.session_state.og_df.update(grid_response['data']['input'])
+    grid_response['data'].set_index('index', inplace=True)
+    st.session_state.og_df['input'].update(grid_response['data']['input'])
+    # st.session_state.grid_data = grid_response['data']
     st.session_state.data_updated = True
     if grid_response['selected_rows']:
         selected = grid_response['selected_rows']
